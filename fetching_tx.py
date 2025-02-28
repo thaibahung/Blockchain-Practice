@@ -16,7 +16,7 @@ UNISWAP_V2_FUNCTIONS = {
     "swapExactETHForTokens": "0x7ff36ab5",
     "swapExactTokensForETH": "0x18cbafe5",
     "swapExactTokensForTokens": "0x38ed1739",
-    "swapETHForExactTokens": "0xfb3bdb41"
+    "swapETHForExactTokens": "0xfb3bdb41" 
 }
 
 async def fetch_transaction_details(tx_hash):
