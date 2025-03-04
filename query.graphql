@@ -1,0 +1,18 @@
+{
+  pairs(orderBy: volumeUSD, orderDirection: desc, first: 200) {
+    id
+    token0 {
+      symbol
+    }
+    token1 {
+      symbol
+    }
+    reserve0
+    reserve1
+    swaps(first: 1, orderBy: timestamp, orderDirection: desc) {
+      transaction {
+        blockNumber
+      }
+    }
+  }
+}

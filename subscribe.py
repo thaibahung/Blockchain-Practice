@@ -33,7 +33,7 @@ async def subscribe():
             subscription_request = {
                 "jsonrpc": "2.0",
                 "id": 2,
-                "method": "eth_subscribe",
+                "method": "cl",
                 "params": ["newPendingTransactions"]
             }
             
