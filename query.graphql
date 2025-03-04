@@ -9,7 +9,17 @@
     }
     reserve0
     reserve1
-    swaps(first: 1, orderBy: timestamp, orderDirection: desc) {
+    swaps(orderBy: timestamp, orderDirection: desc, first: 1) {
+      transaction {
+        blockNumber
+      }
+    }
+    mints(orderBy: timestamp, orderDirection: desc, first: 1) {
+      transaction {
+        blockNumber
+      }
+    }
+    burns(orderBy: timestamp, orderDirection: desc, first: 1) {
       transaction {
         blockNumber
       }

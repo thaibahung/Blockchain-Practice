@@ -22,11 +22,25 @@ if response.status_code == 200:
         reserve0 = pair["reserve0"]
         reserve1 = pair["reserve1"]
 
-        block_number = (
+        block_number = '0'
+        block_number = max(block_number, (
             pair["swaps"][0]["transaction"]["blockNumber"]
             if pair["swaps"]
             else "N/A"
-        )
+        ))
+
+        block_number = max(block_number, (
+            pair["mints"][0]["transaction"]["blockNumber"]
+            if pair["mints"]
+            else "N/A"
+        ))
+
+        block_number = max(block_number, (
+            pair["burns"][0]["transaction"]["blockNumber"]
+            if pair["burns"]
+            else "N/A"
+        ))
+
         print(f"{token0}/{token1} - Reserve0: {reserve0} - Reserve1: {reserve1}, Block: {block_number}")
 else:
     print("Kiểm Tra Lại", response.status_code, response.text)
