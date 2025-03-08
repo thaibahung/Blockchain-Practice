@@ -2,11 +2,13 @@ import asyncio
 import websockets
 import time
 import requests
+import csv
 
 Infura_wss = 'wss://mainnet.infura.io/ws/v3/67d4fda1bfc248aaba4b1ac954169e08'
 subgraph_url = "https://gateway.thegraph.com/api/53b8386571487df55de93e545a902af7/subgraphs/id/A3Np3RQbaBA6oKJgiwDJeo5T3zrYfGHPWFYayMwtNDum"
 with open("query.graphql","r") as file:
     st = file.read().strip()
+
 
 query = {"query": st}
 response = requests.post(subgraph_url, json=query)
@@ -41,6 +43,11 @@ if response.status_code == 200:
             else "N/A"
         ))
 
-        print(f"{token0}/{token1} - Reserve0: {reserve0} - Reserve1: {reserve1}, Block: {block_number}")
+        #print(block_number)
+
+        with open('request.csv', 'a', newline='') as file:
+            writer = csv.writer(file)
+            writer.writerow([f"{token0}/{token1}", reserve0, reserve1, block_number])
+        #print(f"{token0}/{token1} - Reserve0: {reserve0} - Reserve1: {reserve1}, Block: {block_number}")
 else:
     print("Kiểm Tra Lại", response.status_code, response.text)
