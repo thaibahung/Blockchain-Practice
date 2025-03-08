@@ -18,7 +18,7 @@ if response.status_code == 200:
     data = response.json()
     pairs = data["data"]["pairs"]
 
-    for pair in pairs[:10]:  
+    for pair in pairs[:1]:  
         token0 = pair["token0"]["symbol"]
         token1 = pair["token1"]["symbol"]
         reserve0 = pair["reserve0"]
