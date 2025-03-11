@@ -44,10 +44,12 @@ async def process_transaction(tx_hash):
 
     # Check if transaction is sent to Uniswap V2 Router
     if to_address and to_address.lower() == UNISWAP_V2_ROUTER.lower():
+    # if True:
         function_signature = input_data[:10]  # First 4 bytes of calldata (10 characters including '0x')
 
         # Check if function signature matches Uniswap V2 swap functions
-        if function_signature in UNISWAP_V2_FUNCTIONS.values():
+        # if function_signature in UNISWAP_V2_FUNCTIONS.values():
+        if True:
             print("**Uniswap V2 Swap Transaction Detected!**")
             print(f"TX Hash: {tx_hash}")
             print(f"Interacting Contract: {to_address} (Uniswap V2 Router)")
