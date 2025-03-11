@@ -17,8 +17,15 @@ if response.status_code == 200:
     print("Oke")
     data = response.json()
     pairs = data["data"]["pairs"]
+    st = time.time()
 
-    for pair in pairs[:1]:  
+    block_number = data["data"]["_meta"]["block"]["number"]
+    # print(block_number)
+    with open('request.csv', 'w', newline='') as file:
+        writer = csv.writer(file)
+        writer.writerow([block_number])
+
+    for pair in pairs[:10]:  
         token0 = pair["token0"]["symbol"]
         token1 = pair["token1"]["symbol"]
         reserve0 = pair["reserve0"]
@@ -48,6 +55,10 @@ if response.status_code == 200:
         with open('request.csv', 'a', newline='') as file:
             writer = csv.writer(file)
             writer.writerow([f"{token0}/{token1}", reserve0, reserve1, block_number])
-        #print(f"{token0}/{token1} - Reserve0: {reserve0} - Reserve1: {reserve1}, Block: {block_number}")
+        # print(f"{token0}/{token1} - Reserve0: {reserve0} - Reserve1: {reserve1}, Block: {block_number}")
+    
+    end = time.time()
+    print(f"Time: {end - st}")
+
 else:
     print("Kiểm Tra Lại", response.status_code, response.text)
