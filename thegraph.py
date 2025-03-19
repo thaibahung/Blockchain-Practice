@@ -7,12 +7,21 @@ import json
 
 Infura_wss = 'wss://mainnet.infura.io/ws/v3/67d4fda1bfc248aaba4b1ac954169e08'
 subgraph_url = "https://gateway.thegraph.com/api/53b8386571487df55de93e545a902af7/subgraphs/id/A3Np3RQbaBA6oKJgiwDJeo5T3zrYfGHPWFYayMwtNDum"
+
+# Uniswap V2 Router Address (lowercase)
+UNISWAP_V2_ROUTER = "0x7a250d5630b4cf539739df2c5dacb4c659f2488d"
+
+
 with open("query.graphql","r") as file:
     st = file.read().strip()
 
 with open("request.csv", "w", newline="") as file:
     writer = csv.writer(file)
     writer.writerow(["Token Pair", "Reserve0", "Reserve1", "Last Block Updated"])
+
+with open("mempool_tx.csv", "w", newline= "") as file:
+    write = csv.writer(file)
+    write.writerow(["Liquid Pool Hash", "Gas Price", "Value", "Transaction Hash"])
 
 
 async def listen_for_new_blocks():
@@ -99,6 +108,8 @@ async def fetch_lastest_data():
 
     else:
         print("Kiểm Tra Lại", response.status_code, response.text)
+
+
 
 
 async def main():
