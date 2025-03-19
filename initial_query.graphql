@@ -1,0 +1,20 @@
+{
+    _meta {
+        block {
+        number
+        }
+    },
+    pairs(orderBy: volumeUSD, orderDirection: desc, first: 200) {
+        id
+        token0 {
+            symbol
+            id
+        }
+        token1 {
+            symbol
+            id
+        }
+        reserve0
+        reserve1
+    }
+}
