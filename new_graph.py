@@ -6,13 +6,14 @@ import time
 import requests
 import csv
 
+
 Infura_wss = 'wss://mainnet.infura.io/ws/v3/67d4fda1bfc248aaba4b1ac954169e08'
 subgraph_url = "https://gateway.thegraph.com/api/53b8386571487df55de93e545a902af7/subgraphs/id/A3Np3RQbaBA6oKJgiwDJeo5T3zrYfGHPWFYayMwtNDum"
 INFURA_HTTP = "https://mainnet.infura.io/v3/67d4fda1bfc248aaba4b1ac954169e08"
 
 # Uniswap V2 Router & Factorty Address
 UNISWAP_V2_ROUTER = Web3.to_checksum_address("0x7a250d5630b4cf539739df2c5dacb4c659f2488d")
-UNISWAP_V2_FACTORY_ADDRESS = '0x5C69bEe701ef814a2B6a3EDD4B1F9a1bA5c1b8F9'
+UNISWAP_V2_FACTORY_ADDRESS = Web3.to_checksum_address('0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f')
 
 abi_types = ['uint256', 'uint256', 'address[]', 'address', 'uint256']
 
@@ -29,38 +30,8 @@ swap_selectors = {
 
 # Cac ABI can thiet
 
-minimal_abi = [
-    {
-        "constant": False,
-        "inputs": [
-            {"name": "amountIn", "type": "uint256"},
-            {"name": "amountOutMin", "type": "uint256"},
-            {"name": "path", "type": "address[]"},
-            {"name": "to", "type": "address"},
-            {"name": "deadline", "type": "uint256"}
-        ],
-        "name": "swapExactTokensForTokens",
-        "outputs": [{"name": "", "type": "uint256[]"}],
-        "payable": False,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": False,
-        "inputs": [
-            {"name": "amountIn", "type": "uint256"},
-            {"name": "amountOutMin", "type": "uint256"},
-            {"name": "path", "type": "address[]"},
-            {"name": "to", "type": "address"},
-            {"name": "deadline", "type": "uint256"}
-        ],
-        "name": "swapTokensForExactTokens",
-        "outputs": [{"name": "", "type": "uint256[]"}],
-        "payable": False,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    }
-]
+with open("minimal_abi.json","r") as file:
+    minimal_abi = json.load(file)
 
 FACTORY_ABI = '''[
     {
@@ -97,7 +68,8 @@ PAIR_ABI = '''[
 
 # Khoi tao web3 va cac thu can theit
 web3 = Web3(Web3.HTTPProvider(INFURA_HTTP))
-contract = web3.eth.contract(address=UNISWAP_V2_ROUTER, abi=minimal_abi) # Contract de decode
+router_contract = web3.eth.contract(address=UNISWAP_V2_ROUTER, abi=minimal_abi) # Contract de decode
+factory_contract = web3.eth.contract(address=UNISWAP_V2_FACTORY_ADDRESS, abi=FACTORY_ABI) # Contract de lay reserve
 
 with open("request.csv", "w", newline="") as file:
     writer = csv.writer(file)
@@ -134,11 +106,40 @@ async def listen_for_transactions():
 
                 if tx['to'] != None and tx['to'].lower() == "0x7a250d5630b4cf539739df2c5dacb4c659f2488d":
                     if tx.input[:4].lower() in swap_selectors:
+                        # print(tx.hash.hex())
+                        print(tx.input[:4].lower())
                         try:
-                            decoded_input = contract.decode_function_input(tx.input)
+                            decoded_input = router_contract.decode_function_input(tx.input)
                             #print(decoded_input)
                             path = decoded_input[1]['path']  # The token path (array of token addresses)
                             print(f"Path: {path}, {tx.hash.hex()}")
+
+                            for i in range(0, len(path)-1):
+                                token0 = path[i]
+                                token1 = path[i+1]
+                                pair_address = factory_contract.functions.getPair(token0, token1).call()
+                                
+                                if pair_address == '0x0000000000000000000000000000000000000000':
+                                    print("Ko co pair")
+                                    continue
+                                
+                                pair_contract = web3.eth.contract(address=pair_address, abi=PAIR_ABI)
+                                reserve0, reserve1, _ = pair_contract.functions.getReserves().call()
+                                
+                                print(f"Reserve0: {reserve0}, Reserve1: {reserve1}")
+                                
+                                # Viet vao csv
+                                with open('request.csv', 'r') as file:
+                                    lines = file.readlines()
+
+                                with open("request.csv", "r+", newline="") as file:
+                                    pair_address = pair_address.lower()
+                                    for line in lines:
+                                        if pair_address in line:
+                                            updated_line = f"{token0}/{token1}, {reserve0}, {reserve1}, {pair_address}\n"
+                                            file.write(updated_line)
+                                            break
+
                         except Exception as e:
                             print(f"Error decoding input: {e}")
 
@@ -175,7 +176,16 @@ async def fetch_initial_data():
                 writer.writerow([f"{token0}/{token1}", reserve0, reserve1, add])
 
 async def main():
+    await fetch_initial_data()
     await listen_for_transactions()
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+'''
+Còn vài bước tối ưu:
+- Sửa bước decode -> json prettier
+- So sanh block number
+- Tối ưu cách ghi vào file csv
+- Ghi đúng thứ tự reserve0/reserve1 (nên là cái bé đúng trước)
+'''
