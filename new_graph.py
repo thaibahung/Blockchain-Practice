@@ -22,10 +22,12 @@ swap_selectors = {
     b'\x88\x03\xdb\xee',  # swapExactTokensForETH selector
     b'\x4a\x25\xd9\x4a',  # swapTokensForExactTokens selector
     b'\x18\xcb\xaf\xe5',  # swapETHForExactTokens selector
-    b'\xb6\xf9\xde\x95',  # swapExactTokensForTokensSupportingFeeOnTransferTokens
-    b'\x7f\xf3\x6a\xb5',  # swapExactTokensForETHSupportingFeeOnTransferTokens
-    b'\xfb\x3b\xdb\x41',  # swapTokensForExactTokensSupportingFeeOnTransferTokens
-    b'\x79\x1a\xc9\x47'   # swapETHForExactTokensSupportingFeeOnTransferTokens
+    b'\x5c\x11\x5d\x9f',  # swapExactETHForTokens selector
+    b'\x7f\xf3j\x6a\xb5'   # 'swapExactETHForTokens(uint256,address[],address,uint256)',
+    b'\xfb\x3b\xdb\x41'   # 'swapETHForExactTokens(uint256,address[],address,uint256)',
+    b'\xb6\xf9\xde\x95'   # 'swapExactTokensForTokensSupportingFeeOnTransferTokens(uint256,uint256,address[],address,uint256)',
+    b'\x79\x1a\xc9\x47'   # 'swapTokensForExactTokensSupportingFeeOnTransferTokens(uint256,uint256,address[],address,uint256)',
+    b'\xd0\x6c\xa0\x61'   # swapExactETHForTokensSupportingFeeOnTransferTokens(uint256,address[],address,uint256)'
 }
 
 # Cac ABI can thiet
@@ -102,14 +104,15 @@ async def listen_for_transactions():
 
             print(f"New block detected: {block_number}")
             for tx in full_tx.transactions:
-                # print(tx['input'], type(tx['input']))
-
                 if tx['to'] != None and tx['to'].lower() == "0x7a250d5630b4cf539739df2c5dacb4c659f2488d":
-                    if tx.input[:4].lower() in swap_selectors:
-                        # print(tx.hash.hex())
-                        print(tx.input[:4].lower())
+                    
+                    print(tx.input[:4].lower(), tx.hash.hex())
+
+                    # if tx.input[:4].lower() in swap_selectors:
+                    if True:
                         try:
                             decoded_input = router_contract.decode_function_input(tx.input)
+                            # decoded_input_2 = web3.eth.decode
                             #print(decoded_input)
                             path = decoded_input[1]['path']  # The token path (array of token addresses)
                             print(f"Path: {path}, {tx.hash.hex()}")

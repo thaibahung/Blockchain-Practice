@@ -17,8 +17,8 @@
     {
         "constant": false,
         "inputs": [
-            {"name": "amountIn", "type": "uint256"},
-            {"name": "amountOutMin", "type": "uint256"},
+            {"name": "amountOut", "type": "uint256"},
+            {"name": "amountInMax", "type": "uint256"},
             {"name": "path", "type": "address[]"},
             {"name": "to", "type": "address"},
             {"name": "deadline", "type": "uint256"}
@@ -32,6 +32,39 @@
     {
         "constant": false,
         "inputs": [
+            { "name": "amountOut", "type": "uint256" },
+            { "name": "amountInMax", "type": "uint256" },
+            { "name": "path", "type": "address[]" },
+            { "name": "to", "type": "address" },
+            { "name": "deadline", "type": "uint256" }
+        ],
+        "name": "swapTokensForExactETH",
+        "outputs": [
+            { "name": "amounts", "type": "uint256[]" }
+        ],
+        "payable": false,
+        "stateMutability": "nonpayable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            { "name": "amountOutMin", "type": "uint256" },
+            { "name": "path", "type": "address[]" },
+            { "name": "to", "type": "address" },
+            { "name": "deadline", "type": "uint256" }
+        ],
+        "name": "swapExactETHForTokens",
+        "outputs": [
+            { "name": "amounts", "type": "uint256[]" }
+        ],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
             { "name": "amountIn", "type": "uint256" },
             { "name": "amountOutMin", "type": "uint256" },
             { "name": "path", "type": "address[]" },
@@ -39,9 +72,7 @@
             { "name": "deadline", "type": "uint256" }
         ],
         "name": "swapExactTokensForETH",
-        "outputs": [
-            { "name": "amounts", "type": "uint256[]" }
-        ],
+        "outputs": [],
         "payable": false,
         "stateMutability": "nonpayable",
         "type": "function"
@@ -55,11 +86,9 @@
             { "name": "deadline", "type": "uint256" }
         ],
         "name": "swapETHForExactTokens",
-        "outputs": [
-            { "name": "amounts", "type": "uint256[]" }
-        ],
+        "outputs": [],
         "payable": true,
-        "stateMutability": "payable",
+        "stateMutability": "nonpayable",
         "type": "function"
     },
     {
@@ -80,7 +109,21 @@
     {
         "constant": false,
         "inputs": [
-            { "name": "amountIn", "type": "uint256" },
+            { "name": "amountOutMin", "type": "uint256" },
+            { "name": "path", "type": "address[]" },
+            { "name": "to", "type": "address" },
+            { "name": "deadline", "type": "uint256" }
+        ],
+        "name": "swapExactETHForTokensSupportingFeeOnTransferTokens",
+        "outputs": [],
+        "payable": true,
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "constant": false,
+        "inputs": [
+            { "name": "amountIn", "type": "unit256"},
             { "name": "amountOutMin", "type": "uint256" },
             { "name": "path", "type": "address[]" },
             { "name": "to", "type": "address" },
@@ -88,37 +131,8 @@
         ],
         "name": "swapExactTokensForETHSupportingFeeOnTransferTokens",
         "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            { "name": "amountOut", "type": "uint256" },
-            { "name": "amountInMax", "type": "uint256" },
-            { "name": "path", "type": "address[]" },
-            { "name": "to", "type": "address" },
-            { "name": "deadline", "type": "uint256" }
-        ],
-        "name": "swapTokensForExactTokensSupportingFeeOnTransferTokens",
-        "outputs": [],
-        "payable": false,
-        "stateMutability": "nonpayable",
-        "type": "function"
-    },
-    {
-        "constant": false,
-        "inputs": [
-            { "name": "amountOut", "type": "uint256" },
-            { "name": "path", "type": "address[]" },
-            { "name": "to", "type": "address" },
-            { "name": "deadline", "type": "uint256" }
-        ],
-        "name": "swapETHForExactTokensSupportingFeeOnTransferTokens",
-        "outputs": [],
         "payable": true,
         "stateMutability": "payable",
         "type": "function"
-    }                    
+    }              
 ]
