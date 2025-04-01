@@ -123,7 +123,7 @@
     {
         "constant": false,
         "inputs": [
-            { "name": "amountIn", "type": "unit256"},
+            { "name": "amountIn", "type": "unit256" },
             { "name": "amountOutMin", "type": "uint256" },
             { "name": "path", "type": "address[]" },
             { "name": "to", "type": "address" },
@@ -131,8 +131,6 @@
         ],
         "name": "swapExactTokensForETHSupportingFeeOnTransferTokens",
         "outputs": [],
-        "payable": true,
-        "stateMutability": "payable",
         "type": "function"
     }              
 ]
