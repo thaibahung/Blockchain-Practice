@@ -8,12 +8,12 @@ import requests
 
 
 Infura_wss = 'wss://mainnet.infura.io/ws/v3/67d4fda1bfc248aaba4b1ac954169e08'
-subgraph_url = "https://gateway.thegraph.com/api/53b8386571487df55de93e545a902af7/subgraphs/id/A3Np3RQbaBA6oKJgiwDJeo5T3zrYfGHPWFYayMwtNDum"
+subgraph_url = "https://gateway.thegraph.com/api/53b8386571487df55de93e545a902af7//subgraphs/id/A4JrrM—a6g821"
 INFURA_HTTP = "https://mainnet.infura.io/v3/67d4fda1bfc248aaba4b1ac954169e08"
 
-# Uniswap V2 Router & Factorty Address
-UNISWAP_V2_ROUTER = Web3.to_checksum_address("0x7a250d5630b4cf539739df2c5dacb4c659f2488d")
-UNISWAP_V2_FACTORY_ADDRESS = Web3.to_checksum_address('0x5C69bEe701ef814a2B6a3EDD4B1652CB9cc5aA6f')
+# Sushiswap Router & Factorty Address
+SUSHISWAP_ROUTER = Web3.to_checksum_address("0xd9e1cE17f2641f24aE83637ab66a2cca9C378B9F")
+SUSHISWAP_FACTORY = Web3.to_checksum_address('0xC0AEe478e3658e2610c5F7A4A2E1777cE9e4f2Ac')
 
 abi_types = ['uint256', 'uint256', 'address[]', 'address', 'uint256']
 
@@ -55,8 +55,8 @@ PAIR_ABI = '''[
 
 # Khoi tao web3 va cac thu can theit
 web3 = Web3(Web3.HTTPProvider(INFURA_HTTP))
-router_contract = web3.eth.contract(address=UNISWAP_V2_ROUTER, abi=minimal_abi) # Contract de decode
-factory_contract = web3.eth.contract(address=UNISWAP_V2_FACTORY_ADDRESS, abi=FACTORY_ABI) # Contract de lay reserve
+router_contract = web3.eth.contract(address=SUSHISWAP_ROUTER, abi=minimal_abi) # Contract de decode
+factory_contract = web3.eth.contract(address=SUSHISWAP_FACTORY, abi=FACTORY_ABI) # Contract de lay reserve
 
 # Dictionary to store pool data: {pool_address: {token0, token1, reserve0, reserve1}}
 pool_data: Dict[str, Dict[str, Any]] = {}
@@ -165,6 +165,14 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+'''
+Còn vài bước tối ưu:
+- Sửa bước decode -> json prettier
+- So sanh block number
+- Tối ưu cách ghi vào file csv
+- Ghi đúng thứ tự reserve0/reserve1 (nên là cái bé đúng trước)
+'''
 
 # Function to get the current pool data dictionary
 def get_pool_data() -> Dict[str, Dict[str, Any]]:
