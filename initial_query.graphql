@@ -1,9 +1,4 @@
 {
-    _meta {
-        block {
-        number
-        }
-    },
     pairs(orderBy: volumeUSD, orderDirection: desc, first: 200) {
         id
         token0 {

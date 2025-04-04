@@ -92,12 +92,9 @@ async def listen_for_transactions():
                     
                     print(tx.input[:4].lower(), tx.hash.hex())
 
-                    # if tx.input[:4].lower() in swap_selectors:
                     if True:
                         try:
                             decoded_input = router_contract.decode_function_input(tx.input)
-                            # decoded_input_2 = web3.eth.decode
-                            #print(decoded_input)
                             path = decoded_input[1]['path']  # The token path (array of token addresses)
                             print(f"Path: {path}, {tx.hash.hex()}")
 
@@ -113,8 +110,9 @@ async def listen_for_transactions():
                                 pair_contract = web3.eth.contract(address=pair_address, abi=PAIR_ABI)
                                 reserve0, reserve1, _ = pair_contract.functions.getReserves().call()
                                 
-                                print(f"Reserve0: {reserve0}, Reserve1: {reserve1}")
-                                
+                                # print(f"Reserve0: {reserve0}, Reserve1: {reserve1}")
+                                print(f"Pair Address: {pair_address}, Token0: {token0}, Token1: {token1}, Reserve0: {reserve0}, Reserve1: {reserve1}")
+
                                 # Store data in dictionary
                                 pair_address_lower = pair_address.lower()
                                 pool_data[pair_address_lower] = {
