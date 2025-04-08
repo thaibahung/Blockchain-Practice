@@ -3,7 +3,8 @@ import asyncio
 import websockets
 import json
 import time
-from typing import Dict, Any
+import math
+from typing import Dict, Any, Tuple
 import requests
 
 
@@ -60,6 +61,21 @@ factory_contract = web3.eth.contract(address=UNISWAP_V2_FACTORY_ADDRESS, abi=FAC
 
 # Dictionary to store pool data: {pool_address: {token0, token1, reserve0, reserve1}}
 pool_data: Dict[str, Dict[str, Any]] = {}
+pair_address: Dict[Tuple[str, str], str] = {}
+token_address: Dict[str, str] = {}
+
+# Get the pair address from the token addresses
+def get_pair_address(id0, id1):
+    if (id0, id1) in pair_address:
+        return pair_address[(id0, id1)], 0
+    elif (id1, id0) in pair_address:
+        return pair_address[(id1, id0)], 1
+    else:
+        return None, -1
+    
+# Get the token address from the token symbol
+def get_token_address(token_symbol):
+    return token_address.get(token_symbol, None)
 
 async def listen_for_transactions():
     async with websockets.connect(Infura_wss) as websocket:
@@ -77,8 +93,6 @@ async def listen_for_transactions():
         while True:
             response = await websocket.recv()
             data = json.loads(response)
-
-            # print(data)
 
             if "params" not in data or "result" not in data["params"]:
                     continue
@@ -138,16 +152,19 @@ async def fetch_initial_data():
         print("Oke")
         data = response.json()
         pairs = data["data"]["pairs"]
-
-        # Block number gan nhat lay tu graph
         
-        for pair in pairs[:100]:  
+        for pair in pairs[:200]:  
             token0 = pair["token0"]["symbol"]
             token1 = pair["token1"]["symbol"]
             reserve0 = pair["reserve0"]
             reserve1 = pair["reserve1"]
             add = pair["id"]
-            
+
+            # Store the pair address in the dictionary
+            pair_address[(pair["token0"]["id"], pair["token1"]["id"])] = add.lower()
+            token_address[token0] = pair["token0"]["id"]
+            token_address[token1] = pair["token1"]["id"]
+
             # Store data in dictionary
             pool_data[add.lower()] = {
                 'token0': token0,
@@ -155,6 +172,26 @@ async def fetch_initial_data():
                 'reserve0': reserve0,
                 'reserve1': reserve1
             }
+
+# Calculate new price slippage
+def calculate_price(reserve0, reserve1, token0, token1, f=0.003):
+    k = reserve1 * reserve0
+    if token0 > 0:
+        token0 = token0 * (1 - f)
+        return token0 * token0 / k  
+    else:
+        token1 = token1 * (1 - f)
+        return token1 * token1 / k
+
+# Find the best arbitrage cycle
+async def find_best_arbitrage_cycle(path, amount_in):
+    '''
+    - Tinh luong tien di vao moi diem trong path bang slippage (Tru diem cuoi cung)
+    - Tinh thay doi reserve o moi diem
+    - Tao do thi voi gia
+    - For de kiem tra tich co lon hon 1 khong.
+    '''
+    pass
 
 async def main():
     await fetch_initial_data()
