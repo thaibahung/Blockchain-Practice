@@ -64,6 +64,10 @@ pool_data: Dict[str, Dict[str, Any]] = {}
 pair_address: Dict[Tuple[str, str], str] = {}
 token_address: Dict[str, str] = {}
 
+# Get the token address from the token symbol
+def get_token_address(token_symbol):
+    return token_address.get(token_symbol, None)
+
 # Get the pair address from the token addresses
 def get_pair_address(id0, id1):
     if (id0, id1) in pair_address:
@@ -72,10 +76,76 @@ def get_pair_address(id0, id1):
         return pair_address[(id1, id0)], 1
     else:
         return None, -1
+
+# Calculate new price slippage
+def calculate_price(reserve0, reserve1, token0, token1, f=0.003):
+    k = reserve1 * reserve0
+    if token0 > 0:
+        token0 = token0 * (1 - f)
+        return (reserve0 + token0) * (reserve0 + token0) / k  
+    else:
+        token1 = token1 * (1 - f)
+        return (reserve1 + token1) * (reserve1 + token1) / k
+
+
+def calculate_slippage(reserve0, reserve1, token0, token1, f=0.003):
+    k = reserve1 * reserve0
+    if token0 > 0:
+        token0 = token0 * (1 - f)
+        return k / (reserve0 + token0)
+    else:
+        token1 = token1 * (1 - f)
+        return k / (reserve1 + token1)
+
+
+def calculate_out(amount_in, id_token0, id_token1):
+    pair_address, index = get_pair_address(id_token0, id_token1)
+    if pair_address is None:
+        return 0, 0
+    if index == 1:
+        id_token0, id_token1 = id_token1, id_token0
+    reserve0 = pool_data[pair_address]['reserve0']
+    reserve1 = pool_data[pair_address]['reserve1']
+
+    return calculate_slippage(reserve0, reserve1, amount_in, 0), calculate_price(reserve0, reserve1, amount_in, 0)
+
+def check_arbitrage_opportunity(edge, expected_amount):
+    for st in range(len(edge)):
+    return False
+
+# Find the best arbitrage cycle
+async def find_best_arbitrage_cycle(path=[], amount_in=0):
+    '''
+    - Tinh luong tien di vao moi diem trong path bang slippage (Tru diem cuoi cung)
+    - Tinh thay doi reserve o moi diem
+    - Tao do thi voi gia
+    - For de kiem tra tich co lon hon 1 khong.
+    '''
+    for address in token_address.values():
+        print(address)
+
+    expected_amount = [-1, amount_in]
+    for i in range(0, len(path)-1):
+        token0 = path[i]
+        token1 = path[i+1]
+        expected_amount.append(calculate_out(expected_amount[-1], token0, token1)[0])
+    expected_amount.append(-1)
+
+    for i in range(0, len(path)-1):
+        for j in range(i+1, len(path)):
+            edge = []
+            for k in range(i, j):
+                token0 = path[k]
+                token1 = path[k+1]
+                edge.append((token0, token1))
     
-# Get the token address from the token symbol
-def get_token_address(token_symbol):
-    return token_address.get(token_symbol, None)
+            for address in token_address.values():
+                edge.insert(0,(address, path[i]))
+                edge.append((path[j], address))
+
+
+    return
+    
 
 async def listen_for_transactions():
     async with websockets.connect(Infura_wss) as websocket:
@@ -101,16 +171,17 @@ async def listen_for_transactions():
             full_tx = web3.eth.get_block(block_number, full_transactions=True)
 
             print(f"New block detected: {block_number}")
+
             for tx in full_tx.transactions:
                 if tx['to'] != None and tx['to'].lower() == "0x7a250d5630b4cf539739df2c5dacb4c659f2488d":
                     
-                    print(tx.input[:4].lower(), tx.hash.hex())
+                    # print(tx.input[:4].lower(), tx.hash.hex())
 
                     if True:
                         try:
                             decoded_input = router_contract.decode_function_input(tx.input)
                             path = decoded_input[1]['path']  # The token path (array of token addresses)
-                            print(f"Path: {path}, {tx.hash.hex()}")
+                            # print(f"Path: {path}, {tx.hash.hex()}")
 
                             for i in range(0, len(path)-1):
                                 token0 = path[i]
@@ -125,7 +196,7 @@ async def listen_for_transactions():
                                 reserve0, reserve1, _ = pair_contract.functions.getReserves().call()
                                 
                                 # print(f"Reserve0: {reserve0}, Reserve1: {reserve1}")
-                                print(f"Pair Address: {pair_address}, Token0: {token0}, Token1: {token1}, Reserve0: {reserve0}, Reserve1: {reserve1}")
+                                # print(f"Pair Address: {pair_address}, Token0: {token0}, Token1: {token1}, Reserve0: {reserve0}, Reserve1: {reserve1}")
 
                                 # Store data in dictionary
                                 pair_address_lower = pair_address.lower()
@@ -139,6 +210,7 @@ async def listen_for_transactions():
                         except Exception as e:
                             print(f"Error decoding input: {e}")
 
+            await find_best_arbitrage_cycle()
 
 # Lay thong tin id pool tu dau tu the graph
 async def fetch_initial_data():
@@ -172,26 +244,6 @@ async def fetch_initial_data():
                 'reserve0': reserve0,
                 'reserve1': reserve1
             }
-
-# Calculate new price slippage
-def calculate_price(reserve0, reserve1, token0, token1, f=0.003):
-    k = reserve1 * reserve0
-    if token0 > 0:
-        token0 = token0 * (1 - f)
-        return token0 * token0 / k  
-    else:
-        token1 = token1 * (1 - f)
-        return token1 * token1 / k
-
-# Find the best arbitrage cycle
-async def find_best_arbitrage_cycle(path, amount_in):
-    '''
-    - Tinh luong tien di vao moi diem trong path bang slippage (Tru diem cuoi cung)
-    - Tinh thay doi reserve o moi diem
-    - Tao do thi voi gia
-    - For de kiem tra tich co lon hon 1 khong.
-    '''
-    pass
 
 async def main():
     await fetch_initial_data()
