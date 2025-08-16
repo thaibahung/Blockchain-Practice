@@ -5,6 +5,7 @@ from logger import logger
 
 from infrastructure.data_providers.pools.v2_pool import V2Pool
 from domain.entities.pool_models import IPool
+# from infrastructure.repositories.redis_logger import redis_pool_logger
 
 
 
@@ -102,10 +103,60 @@ class PoolSimulatorManager:
             self.pool_simulators[pool_address] = pool_simulator
             address_cache_key = self._create_pool_by_tokens_cache_key(token0, token1, 0, provider_name)
             self.v2_pool_address_cache[address_cache_key] = pool_address
-            
+
             # Log pool creation to Redis
-            redis_pool_logger.log_pool_creation(pool_simulator, block_number)
+            # redis_pool_logger.log_pool_creation(pool_simulator, block_number)
             
-            logger.debug(f"Created V2 pool simulator for {pool_address}")
+            # logger.debug(f"Created V2 pool simulator for {pool_address}")
         except Exception as e:
             logger.exception(f"Error creating V2 pool simulator for {pool_address}")
+
+    
+    def _update_graph_edges(self, pool_simulator: Any, price_graph: Any) -> None:
+        """
+        Update the graph edges for a pool simulator.
+        
+        Args:
+            pool_simulator: The pool simulator
+            price_graph: The price graph to update
+        """
+        try:
+            if isinstance(pool_simulator, V2Pool):
+                # Update graph edges for V2 pool
+                # Get token addresses
+                token0 = pool_simulator.token0
+                token1 = pool_simulator.token1
+                pair_address = pool_simulator.address
+                
+                # Update token0 -> token1 edge (price0)
+                if price_graph.has_edge(token0, token1, key=pair_address):
+                    price0 = Decimal(pool_simulator.price0)
+                    price_graph[token0][token1][pair_address]['weight'] = -math.log(price0)
+                    price_graph[token0][token1][pair_address]['price'] = price0
+                
+                # Update token1 -> token0 edge (price1)
+                if price_graph.has_edge(token1, token0, key=pair_address):
+                    price1 = Decimal(pool_simulator.price1)
+                    price_graph[token1][token0][pair_address]['weight'] = -math.log(price1)
+                    price_graph[token1][token0][pair_address]['price'] = price1
+        
+        except Exception as e:
+            logger.exception(f"Error updating graph edges")
+
+    def export_to_csv(self, file_path: str) -> None:
+        """
+        Export all pool simulators to a CSV file with columns: address, token0, token1, reserve0, reserve1
+        """
+        import csv
+        with open(file_path, mode='w', newline='', encoding='utf-8') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow(["address", "token0", "token1", "reserve0", "reserve1"])
+            for pool in self.pool_simulators.values():
+                # Assumes pool has attributes: address, token0, token1, reserve0, reserve1
+                writer.writerow([
+                    getattr(pool, "address", ""),
+                    getattr(pool, "token0", ""),
+                    getattr(pool, "token1", ""),
+                    getattr(pool, "reserve0", ""),
+                    getattr(pool, "reserve1", "")
+                ])

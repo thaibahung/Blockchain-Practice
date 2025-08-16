@@ -25,6 +25,8 @@ var/
 *.egg-info/
 .installed.cfg
 *.egg
+node_modules/
+*.csv
 
 # Unit test / coverage reports
 htmlcov/

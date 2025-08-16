@@ -110,3 +110,67 @@ class V2Sync(V2PoolEvent):
     def __post_init__(self):
         """Initialize the event_type field."""
         self.event_type = 'sync'
+
+@dataclass
+class CexTradingPair:
+    """Trading pair information for centralized exchanges."""
+    symbol: str
+    base_asset: str
+    quote_asset: str
+    volume_24h: Decimal
+    liquidity_usd: Decimal
+    price: Decimal
+    min_price: Decimal
+    max_price: Decimal
+    tick_size: Decimal
+    min_qty: Decimal
+    max_qty: Decimal
+    step_size: Decimal
+
+@dataclass
+class DexTradingPair:
+    """Trading pair information for decentralized exchanges."""
+    pair_address: str
+    token0_address: str
+    token0_symbol: str
+    token0_derivedETH: Decimal
+    token0_decimals: int
+    token1_address: str
+    token1_symbol: str
+    token1_derivedETH: Decimal
+    token1_decimals: int
+    total_liquidity_usd: Decimal
+    volume_24h: Decimal
+    fee_tier: int # Fee tier in basis points (e.g., 3000 for 0.3%)
+    reserve0: Decimal
+    reserve1: Decimal
+    token0_price: Decimal  # token0 per token1
+    token1_price: Decimal  # token1 per token0
+    network: str  # Network name (e.g., Ethereum, Binance Smart Chain)
+    block_number: int = 0## Block number at which the data was fetched
+    protocol: str = "" # Protocol identifier (e.g., Uniswap V2, Uniswap V3, etc.)
+
+@dataclass
+class TradingPairFilter:
+    """Filter options for trading pairs."""
+    min_liquidity_usd: Optional[Decimal] = None
+    min_volume_24h: Optional[Decimal] = None
+    assets: Optional[set[str]] = None
+
+
+@dataclass
+class Transaction:
+    """Represents an transaction."""
+    hash: str
+    to: str
+    from_address: str
+    input_data: str
+    value: int
+    gas: int
+    gas_price: Optional[int] = None
+    maxPriorityFeePerGas: Optional[int] = None
+    maxFeePerGas: Optional[int] = None
+    nonce: Optional[int] = None
+    v: Optional[int] = None
+    r: Optional[str] = None
+    s: Optional[str] = None
