@@ -27,6 +27,7 @@ var/
 *.egg
 node_modules/
 *.csv
+*.png
 
 # Unit test / coverage reports
 htmlcov/

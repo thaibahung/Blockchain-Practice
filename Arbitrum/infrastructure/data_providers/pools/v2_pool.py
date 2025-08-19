@@ -18,6 +18,7 @@ class V2Pool(IV2Pool):
         fee: float = 0.003,  # Default fee is 0.3%
         decimals0: int = 18,
         decimals1: int = 18,
+        block_number: int = None,
         protocol: str = "uniswap_v2"
     ):
         """
@@ -42,10 +43,16 @@ class V2Pool(IV2Pool):
         self._decimals0 = decimals0
         self._decimals1 = decimals1
         self._fee_pct = fee  # For compatibility with SimulatedV2Pool
+        self._block_number = block_number
         self._protocol = protocol
         
         # Pre-calculate fee multiplier for integer arithmetic (fee as parts per 10000)
         self._fee_multiplier = int((1 - fee) * 10000)  # e.g., 9970 for 0.3% fee
+
+    @property
+    def block_number(self) -> int:
+        """Get the block number."""
+        return self._block_number
 
     @property
     def protocol(self) -> str:

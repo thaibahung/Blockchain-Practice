@@ -96,7 +96,8 @@ class PoolSimulatorManager:
                 fee=fee_tier/1000000.0,  #Convert fee tier from basis points to decimal
                 decimals0=decimals0,
                 decimals1=decimals1,
-                protocol=provider_name  # Adding protocol identifier
+                protocol=provider_name,  # Adding protocol identifier
+                block_number=block_number
             )
             
             # Store pool simulator
@@ -111,7 +112,7 @@ class PoolSimulatorManager:
         except Exception as e:
             logger.exception(f"Error creating V2 pool simulator for {pool_address}")
 
-    
+    '''
     def _update_graph_edges(self, pool_simulator: Any, price_graph: Any) -> None:
         """
         Update the graph edges for a pool simulator.
@@ -142,21 +143,12 @@ class PoolSimulatorManager:
         
         except Exception as e:
             logger.exception(f"Error updating graph edges")
+    '''
 
-    def export_to_csv(self, file_path: str) -> None:
-        """
-        Export all pool simulators to a CSV file with columns: address, token0, token1, reserve0, reserve1
-        """
-        import csv
-        with open(file_path, mode='w', newline='', encoding='utf-8') as csvfile:
-            writer = csv.writer(csvfile)
-            writer.writerow(["address", "token0", "token1", "reserve0", "reserve1"])
-            for pool in self.pool_simulators.values():
-                # Assumes pool has attributes: address, token0, token1, reserve0, reserve1
-                writer.writerow([
-                    getattr(pool, "address", ""),
-                    getattr(pool, "token0", ""),
-                    getattr(pool, "token1", ""),
-                    getattr(pool, "reserve0", ""),
-                    getattr(pool, "reserve1", "")
-                ])
+    def clone(self) -> 'PoolSimulatorManager':
+        return PoolSimulatorManager(
+            pool_simulators=self.pool_simulators,
+            v2_pool_address_cache=self.v2_pool_address_cache
+        )
+
+    

@@ -53,8 +53,6 @@ async def main():
 
     # Start monitoring mempool
     await arbitrage_service.start_monitoring()
-
-    arbitrage_service.arbitrage_detector.pool_simulator_manager.export_to_csv("output.csv")
-
+    
 if __name__ == "__main__":
     asyncio.run(main())
