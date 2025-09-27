@@ -79,8 +79,54 @@ async def main():
         # Start monitoring mempool
         await arbitrage_service.start_monitoring()
 
+        print("\n=== Arbitrage Cycles (node addresses and pair addresses) ===")
+        for i, cycle in enumerate(arbitrage_service.arbitrage_detector.cycles_2):
+            print(f"Cycle {i}: ")
+            print(f"  token1: {cycle.token1}")
+            print(f"  token2: {cycle.token2}")
+            print(f"  edge1 (pair address): {cycle.edge1}")
+            print(f"  edge2 (pair address): {cycle.edge2}")
+
+        print("=== End of Cycles ===\n")
+
+        '''
+        # Debug: Print all cycles with node and edge (pair address) details
+        print("\n=== Arbitrage Cycles (node addresses and pair addresses) ===")
+        for i, cycle in enumerate(arbitrage_service.arbitrage_detector.cycles_3):
+            print(f"Cycle {i}: ")
+            print(f"  token1: {cycle.token1}")
+            print(f"  token2: {cycle.token2}")
+            print(f"  token3: {cycle.token3}")
+            print(f"  edge1 (pair address): {cycle.edge1}")
+            print(f"  edge2 (pair address): {cycle.edge2}")
+            print(f"  edge3 (pair address): {cycle.edge3}")
+
+        print("=== End of Cycles ===\n")
+
+        # Test: Check if each token node is connected to the correct edge (pair address) in the price graph
+        price_graph = arbitrage_service.arbitrage_detector.price_graph
+        for i, cycle in enumerate(arbitrage_service.arbitrage_detector.cycles_3):
+            # Check token1 -> token2 via edge1
+            edge1_found = False
+            if price_graph.has_edge(cycle.token1, cycle.token2, key=cycle.edge1):
+                edge1_found = True
+            # Check token2 -> token3 via edge2
+            edge2_found = False
+            if price_graph.has_edge(cycle.token2, cycle.token3, key=cycle.edge2):
+                edge2_found = True
+            # Check token3 -> token1 via edge3
+            edge3_found = False
+            if price_graph.has_edge(cycle.token3, cycle.token1, key=cycle.edge3):
+                edge3_found = True
+
+            print(f"Test Cycle {i}: edge1 ({cycle.token1}->{cycle.token2}, {cycle.edge1}) exists: {edge1_found}")
+            print(f"Test Cycle {i}: edge2 ({cycle.token2}->{cycle.token3}, {cycle.edge2}) exists: {edge2_found}")
+            print(f"Test Cycle {i}: edge3 ({cycle.token3}->{cycle.token1}, {cycle.edge3}) exists: {edge3_found}")
+            if not (edge1_found and edge2_found and edge3_found):
+                print(f"  [ERROR] At least one edge in cycle {i} does not exist in the price graph!")
+
         export_to_csv(arbitrage_service.arbitrage_detector.pool_simulator_manager, "output1.csv")
-        
+        '''
 
 
 if __name__ == "__main__":

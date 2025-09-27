@@ -6,7 +6,20 @@ import math
 from infrastructure.data_providers.graph.edge import Edge
 from domain.entities.models import DexTradingPair
 
-class Cycle:
-    def __init__(self, cycle: List[Edge], profit: Decimal):
-        self.cycle = cycle
-        self.profit = profit
+class Cycle_3:
+    def __init__(self, token1: str, token2: str, token3: str, 
+                       edge1: str, edge2: str, edge3: str):
+        self.token1 = token1
+        self.token2 = token2
+        self.token3 = token3
+        self.edge1 = edge1
+        self.edge2 = edge2
+        self.edge3 = edge3
+
+class Cycle_2:
+    def __init__(self, token1: str, token2: str, 
+                       edge1: str, edge2: str):
+        self.token1 = token1
+        self.token2 = token2
+        self.edge1 = edge1
+        self.edge2 = edge2
