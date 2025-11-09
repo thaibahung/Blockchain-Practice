@@ -187,7 +187,10 @@ class ArbitrageDetector:
 
                     pairs = []
                     for pair_address in edge_data.keys():
-                        pairs.append(pair_address)
+                        cur = Edge(pool=pair_address, 
+                                    fee=edge_data[pair_address]['fee'], 
+                                    version=edge_data[pair_address]['provider'])
+                        pairs.append(cur)
 
                     if u > v:
                         u, v = v, u
@@ -231,7 +234,10 @@ class ArbitrageDetector:
                         break
                     
                     for pair_address in edge_data.keys():
-                        pairs[i].append(pair_address)
+                        cur = Edge(pool=pair_address, 
+                                    fee=edge_data[pair_address]['fee'], 
+                                    version=edge_data[pair_address]['provider'])
+                        pairs[i].append(cur)
                 
                 for first_pair in pairs[0]:
                     for second_pair in pairs[1]:

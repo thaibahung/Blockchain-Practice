@@ -1,9 +1,10 @@
 from web3 import Web3
 
 # === CONFIG ===
-RPC_URL = "https://mainnet.infura.io/v3/67d4fda1bfc248aaba4b1ac954169e08"  # Ethereum mainnet RPC
-POOL_ADDRESS = "0xB2DC4d7627501338B578985c214208eb32283086"  # PancakeSwap V3 ETH pool
-BLOCK_NUMBER = 23009444
+RPC_URL = "https://sepolia.infura.io/v3/67d4fda1bfc248aaba4b1ac954169e08"  # Ethereum mainnet RPC
+POOL_ADDRESS = "0x3289680dd4d6c10bb19b899729cda5eef58aeff1"
+POOL_ADDRESS = Web3.to_checksum_address(POOL_ADDRESS)
+BLOCK_NUMBER = 9502317
 
 
 # === Setup Web3 ===
@@ -81,4 +82,4 @@ def get_all_initialized_ticks(pool, block, tick_spacing, min_word=-1000, max_wor
 sorted_ticks = get_initialized_ticks(pool, BLOCK_NUMBER, tick, tick_spacing)
 
 print(f"\nFound {len(sorted_ticks)} initialized ticks")
-print("Sample ticks:", sorted_ticks[:10])
+print("Sample ticks:", sorted_ticks)

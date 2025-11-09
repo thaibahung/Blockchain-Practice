@@ -1,9 +1,9 @@
 from web3 import Web3
 
 # Connect to Ethereum node (Infura example)
-w3 = Web3(Web3.HTTPProvider('https://mainnet.infura.io/v3/67d4fda1bfc248aaba4b1ac954169e08'))
+w3 = Web3(Web3.HTTPProvider('https://sepolia.infura.io/v3/67d4fda1bfc248aaba4b1ac954169e08'))
 
-pair_address = Web3.to_checksum_address('0x03B59Bd1c8B9F6C265bA0c3421923B93f15036Fa')
+pair_address = Web3.to_checksum_address('0xf5CacD62814d8fB949c71fDB4a66A620Bc88aD8D')
 # '0xee56f191001f1Ef885f67E86413f86A39976c20b'
 # '0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2_0xee56f191001f1ef885f67e86413f86a39976c20b_0_uniswap_v2'
 # '0x66a0f676479cee1d7373f3dc2e2952778bff5bd6_0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2_0_uniswap_v2'
@@ -26,7 +26,7 @@ pair_abi = [{
 
 pair_contract = w3.eth.contract(address=pair_address, abi=pair_abi)
 
-block_number = 22972900
+block_number = 9593354
 
   # your target block number
 

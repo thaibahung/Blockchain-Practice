@@ -99,6 +99,8 @@ class PoolSimulatorManager:
                 protocol=provider_name,  # Adding protocol identifier
                 block_number=block_number
             )
+
+            print(pool_simulator.address, pool_simulator.token0, pool_simulator.token1, pool_simulator.reserve0, pool_simulator.reserve1)
             
             # Store pool simulator
             self.pool_simulators[pool_address] = pool_simulator
