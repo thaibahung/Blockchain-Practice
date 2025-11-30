@@ -54,3 +54,7 @@ coverage.xml
 
 # Windows
 Thumbs.db
+
+# Remix
+.states/
+artifacts/
