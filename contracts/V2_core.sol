@@ -8,14 +8,14 @@ interface IUniswapV2Pair {
     function swap(uint amount0Out, uint amount1Out, address to, bytes calldata data) external; 
 }
 
-contract V2_core { 
+library V2_core { 
     function getPairReserves(address pair) 
-        public view returns ( uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast ) { 
+        internal view returns ( uint112 reserve0, uint112 reserve1, uint32 blockTimestampLast ) { 
             (reserve0, reserve1, blockTimestampLast) = IUniswapV2Pair(pair).getReserves(); 
         }
     
-    function getAmountsOut(uint256 amountIn, bool zeroforone, address pair, uint256 fee) 
-        public view returns (uint256 amountOut) { 
+    function getAmountsOut_V2(uint256 amountIn, bool zeroforone, address pair, uint256 fee) 
+        internal view returns (uint256 amountOut) { 
             uint256 res0; 
             uint256 res1; 
             uint256 time; 
