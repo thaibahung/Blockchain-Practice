@@ -14,7 +14,7 @@ library V2_core {
             (reserve0, reserve1, blockTimestampLast) = IUniswapV2Pair(pair).getReserves(); 
         }
     
-    function getAmountsOut_V2(uint256 amountIn, bool zeroforone, address pair, uint256 fee) 
+    function getAmountsOut(uint256 amountIn, bool zeroforone, address pair, uint256 fee) 
         internal view returns (uint256 amountOut) { 
             uint256 res0; 
             uint256 res1; 
