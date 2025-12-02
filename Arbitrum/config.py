@@ -5,13 +5,13 @@ from eth_utils import to_checksum_address, keccak
 
 load_dotenv()
 
-# PRIVATE_KEY: Final[str] = os.getenv("PRIVATE_KEY", "")
-# if not PRIVATE_KEY:
-# 	raise ValueError("PRIVATE_KEY environment variable is not set. Please check your .env file.")
+PRIVATE_KEY: Final[str] = os.getenv("PRIVATE_KEY", "")
+if not PRIVATE_KEY:
+ 	raise ValueError("PRIVATE_KEY environment variable is not set. Please check your .env file.")
 
-# ACCOUNT_ADDRESS: Final[str] = os.getenv("ACCOUNT_ADDRESS", "")
-# if not ACCOUNT_ADDRESS:
-#	raise ValueError("ACCOUNT_ADDRESS environment variable is not set. Please check your .env file.")
+ACCOUNT_ADDRESS: Final[str] = os.getenv("ACCOUNT_ADDRESS", "")
+if not ACCOUNT_ADDRESS:
+	raise ValueError("ACCOUNT_ADDRESS environment variable is not set. Please check your .env file.")
 
 INFURA_API_KEY: Final[str] = os.getenv("INFURA_API_KEY", "")
 if not INFURA_API_KEY:
@@ -90,10 +90,8 @@ ERC20_ABI: str = '[{"constant":true,"inputs":[],"name":"decimals","outputs":[{"n
 Optimistic_MEV_ABI: str = '''
 [
 	{
-		"anonymous": false,
 		"inputs": [
 			{
-				"indexed": false,
 				"internalType": "uint256",
 				"name": "amountIn",
 				"type": "uint256"
@@ -182,278 +180,8 @@ Optimistic_MEV_ABI: str = '''
 						"type": "tuple"
 					}
 				],
-				"indexed": false,
 				"internalType": "struct Cycle_3",
-				"name": "cycle",
-				"type": "tuple"
-			}
-		],
-		"name": "CycleAdded",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "label",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "value",
-				"type": "uint256"
-			}
-		],
-		"name": "Debug",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "label",
-				"type": "string"
-			},
-			{
-				"indexed": false,
-				"internalType": "address",
-				"name": "addr",
-				"type": "address"
-			}
-		],
-		"name": "DebugAddr",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "label",
-				"type": "string"
-			},
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "pool",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "fee",
-						"type": "uint256"
-					},
-					{
-						"internalType": "enum PoolVersion",
-						"name": "version",
-						"type": "uint8"
-					}
-				],
-				"indexed": false,
-				"internalType": "struct Edge",
-				"name": "edge",
-				"type": "tuple"
-			}
-		],
-		"name": "DebugPool",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "string",
-				"name": "label",
-				"type": "string"
-			}
-		],
-		"name": "DebugStr",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"internalType": "uint256",
-				"name": "profit",
-				"type": "uint256"
-			}
-		],
-		"name": "ProfitFound",
-		"type": "event"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "cur",
-				"type": "uint256"
-			},
-			{
-				"internalType": "bool",
-				"name": "zeroForOne",
-				"type": "bool"
-			},
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "pool",
-						"type": "address"
-					},
-					{
-						"internalType": "uint256",
-						"name": "fee",
-						"type": "uint256"
-					},
-					{
-						"internalType": "enum PoolVersion",
-						"name": "version",
-						"type": "uint8"
-					}
-				],
-				"internalType": "struct Edge",
-				"name": "edge",
-				"type": "tuple"
-			}
-		],
-		"name": "_callEdge",
-		"outputs": [
-			{
-				"internalType": "uint256",
-				"name": "",
-				"type": "uint256"
-			}
-		],
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "address",
-				"name": "pool",
-				"type": "address"
-			},
-			{
-				"internalType": "address",
-				"name": "tokenIn",
-				"type": "address"
-			}
-		],
-		"name": "_zeroForOne",
-		"outputs": [
-			{
-				"internalType": "bool",
-				"name": "",
-				"type": "bool"
-			}
-		],
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"inputs": [
-			{
-				"internalType": "uint256",
-				"name": "_amountIn",
-				"type": "uint256"
-			},
-			{
-				"components": [
-					{
-						"internalType": "address",
-						"name": "token1",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "token2",
-						"type": "address"
-					},
-					{
-						"internalType": "address",
-						"name": "token3",
-						"type": "address"
-					},
-					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "pool",
-								"type": "address"
-							},
-							{
-								"internalType": "uint256",
-								"name": "fee",
-								"type": "uint256"
-							},
-							{
-								"internalType": "enum PoolVersion",
-								"name": "version",
-								"type": "uint8"
-							}
-						],
-						"internalType": "struct Edge",
-						"name": "edge1",
-						"type": "tuple"
-					},
-					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "pool",
-								"type": "address"
-							},
-							{
-								"internalType": "uint256",
-								"name": "fee",
-								"type": "uint256"
-							},
-							{
-								"internalType": "enum PoolVersion",
-								"name": "version",
-								"type": "uint8"
-							}
-						],
-						"internalType": "struct Edge",
-						"name": "edge2",
-						"type": "tuple"
-					},
-					{
-						"components": [
-							{
-								"internalType": "address",
-								"name": "pool",
-								"type": "address"
-							},
-							{
-								"internalType": "uint256",
-								"name": "fee",
-								"type": "uint256"
-							},
-							{
-								"internalType": "enum PoolVersion",
-								"name": "version",
-								"type": "uint8"
-							}
-						],
-						"internalType": "struct Edge",
-						"name": "edge3",
-						"type": "tuple"
-					}
-				],
-				"internalType": "struct Cycle_3",
-				"name": "_cycle",
+				"name": "c",
 				"type": "tuple"
 			}
 		],
@@ -465,7 +193,7 @@ Optimistic_MEV_ABI: str = '''
 				"type": "uint256"
 			}
 		],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	},
 	{
@@ -564,7 +292,7 @@ Optimistic_MEV_ABI: str = '''
 				"type": "tuple[]"
 			}
 		],
-		"name": "checkProfitForOutside",
+		"name": "checkProfits",
 		"outputs": [
 			{
 				"internalType": "uint256[]",
@@ -572,7 +300,7 @@ Optimistic_MEV_ABI: str = '''
 				"type": "uint256[]"
 			}
 		],
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
 	}
 ]

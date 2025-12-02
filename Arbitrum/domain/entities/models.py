@@ -147,7 +147,7 @@ class DexTradingPair:
     token0_price: Decimal  # token0 per token1
     token1_price: Decimal  # token1 per token0
     network: str  # Network name (e.g., Ethereum, Binance Smart Chain)
-    block_number: int = 0## Block number at which the data was fetched
+    block_number: int = 0  # Block number at which the data was fetched
     protocol: str = "" # Protocol identifier (e.g., Uniswap V2, Uniswap V3, etc.)
 
 @dataclass

@@ -18,7 +18,7 @@ async def main():
     print("Chain ID:", w3.eth.chain_id)
 
     arb_checker = w3.eth.contract(
-        address=Web3.to_checksum_address("0xEfb756900943B23401564e199a4e95BE650CD499"),
+        address=Web3.to_checksum_address("0x4A1721Fc0018F94686Da78697bE809a33bcCB3e1"),
         abi = json.loads(Optimistic_MEV_ABI)
     )
 
@@ -53,7 +53,6 @@ async def main():
     profits = arb_checker.functions.checkProfit(amount_in, cycle).call()
     print(profits)
 
-    
     nonce = w3.eth.get_transaction_count(ACCOUNT_ADDRESS)
     gas_price = w3.eth.gas_price
 
