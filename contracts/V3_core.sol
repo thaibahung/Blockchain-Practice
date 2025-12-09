@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity >=0.7.0 <0.8.0;
+pragma solidity >=0.7.0;
 
 import "https://raw.githubusercontent.com/Uniswap/v3-core/v1.0.0/contracts/interfaces/IUniswapV3Pool.sol";
 import "https://raw.githubusercontent.com/Uniswap/v3-core/v1.0.0/contracts/libraries/SwapMath.sol";
