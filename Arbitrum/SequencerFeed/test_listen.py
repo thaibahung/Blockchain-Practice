@@ -22,7 +22,7 @@ from datetime import datetime
 import dex_config
 import swap_decoder
 
-FEED_URL = "wss://arb1-feed.arbitrum.io/feed"
+FEED_URL = "wss://sepolia-rollup.arbitrum.io/feed"
 
 # Set to False to reduce logging noise
 DEBUG = False
@@ -128,6 +128,10 @@ def analyze_transaction_for_swap(tx_data: dict, tx_hash: str = None) -> dict:
     
     to_address = tx_data['to']
     calldata = tx_data['data']
+
+    if to_address not in ["0x3b26d06ea8252a73742d2125d1aceb594ecee5c6",
+                          "0x12601ca540436780517a5de8888b4f21a7f39233"]:
+        print(to_address)
     
     # Check if the 'to' address is a known DEX router
     if not dex_config.is_dex_router(to_address):
