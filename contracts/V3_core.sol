@@ -1,10 +1,10 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity >=0.7.0;
 
-import "https://raw.githubusercontent.com/Uniswap/v3-core/v1.0.0/contracts/interfaces/IUniswapV3Pool.sol";
-import "https://raw.githubusercontent.com/Uniswap/v3-core/v1.0.0/contracts/libraries/SwapMath.sol";
-import "https://raw.githubusercontent.com/Uniswap/v3-core/v1.0.0/contracts/libraries/TickMath.sol";
-import "https://raw.githubusercontent.com/Uniswap/v3-core/v1.0.0/contracts/libraries/LowGasSafeMath.sol";
+import "./interfaces/IUniswapV3Pool.sol";
+import "./libraries/SwapMath.sol";
+import "./libraries/TickMath.sol";
+import "./libraries/LowGasSafeMath.sol";
 
 library V3Core {
     using LowGasSafeMath for uint256;
