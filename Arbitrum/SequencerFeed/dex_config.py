@@ -21,6 +21,7 @@ DEX_ROUTERS = {
     # SwapRouter02
     "0xe592427a0aece92de3edee1f18e0157c05861564": "Uniswap V3 Router 1",
     "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45": "Uniswap V3 Router 2",
+    "0x101F443B4d1b059569D643917553c771E1b9663E": "Arbitrum Sepolia Uniswap V3 Router",
 
     # Universal Router (v4 routing entrypoint – used for v2/v3 under the hood)
     "0xa51afafe0263b40edaef0df8781ea9aa03e381a3": "Uniswap Universal Router",
@@ -36,7 +37,7 @@ DEX_ROUTERS = {
     # -------------
     # Same address on Arbitrum One + Arbitrum Sepolia
     "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24": "Uniswap V2 Router",
-    "0x101F443B4d1b059569D643917553c771E1b9663E": "Arbitrum Sepolia Uniswap V2 Router",
+
 
     # -------------
     # Camelot
@@ -94,11 +95,11 @@ DEX_VERSIONS = {
     # Uniswap V3 (SwapRouter02 + Universal Router entry)
     "0xe592427a0aece92de3edee1f18e0157c05861564": "Uniswap V3",
     "0x68b3465833fb72a70ecdf485e0e4c7bd8665fc45": "Uniswap V3",
-    "0xa51afafe0263b40edaef0df8781ea9aa03e381a3": "Uniswap V4 Universal Router",  # routes v2/v3/v4
+    "0xa51afafe0263b40edaef0df8781ea9aa03e381a3": "Uniswap V4 Universal Router",  # routes v2/v3/v3
+    "0x101F443B4d1b059569D643917553c771E1b9663E": "Uniswap V3",
 
     # Uniswap V2
     "0x4752ba5dbc23f44d87826276bf6fd6b1c372ad24": "Uniswap V2",
-    "0x101F443B4d1b059569D643917553c771E1b9663E": "Uniswap V2",
 
     # Sushiswap V2
     "0x1b02da8cb0d097eb8d57a175b88c7d8b47997506": "Sushiswap V2",
